@@ -1,6 +1,7 @@
 <img src="https://wcm.io/images/favicon-16@2x.png"/> i18n-maven-plugin
 ======
 [![Build](https://github.com/wcm-io/io.wcm.maven.plugins.i18n-maven-plugin/workflows/Build/badge.svg?branch=develop)](https://github.com/wcm-io/io.wcm.maven.plugins.i18n-maven-plugin/actions?query=workflow%3ABuild+branch%3Adevelop)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.wcm.maven.plugins/i18n-maven-plugin/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.wcm.maven.plugins/i18n-maven-plugin)
 
 Transforms and validates i18n resources for usage in Sling/AEM applications.
 
