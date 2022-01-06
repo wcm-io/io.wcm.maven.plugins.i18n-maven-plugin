@@ -31,7 +31,7 @@ See [Usage][usage] for details.
 
 ### GitHub Repository
 
-Sources: https://github.com/wcm-io/i18n-maven-plugin
+Sources: https://github.com/wcm-io/io.wcm.maven.plugins.i18n-maven-plugin
 
 
 [usage]: usage.html
