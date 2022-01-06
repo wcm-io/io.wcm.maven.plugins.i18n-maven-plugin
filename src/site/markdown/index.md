@@ -29,6 +29,11 @@ All those input files are transformed during maven build to the sling destinatio
 See [Usage][usage] for details.
 
 
+### GitHub Repository
+
+Sources: https://github.com/wcm-io/i18n-maven-plugin
+
+
 [usage]: usage.html
 [plugindocs]: plugin-info.html
 [changelog]: changes-report.html
