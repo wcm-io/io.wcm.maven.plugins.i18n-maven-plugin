@@ -22,6 +22,7 @@ package io.wcm.maven.plugins.i18n;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -38,22 +39,20 @@ import org.jdom2.Namespace;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
-import com.google.common.collect.ImmutableList;
-
 /**
  * Helper class integrating i18n JSON generation into a sorted map.
  */
 class SlingI18nMap {
 
   private static final String JCR_LANGUAGE = "language";
-  private static final List<String> JCR_MIX_LANGUAGE = ImmutableList.of("mix:language");
+  private static final List<String> JCR_MIX_LANGUAGE = Collections.singletonList("mix:language");
   private static final String JCR_MIXIN_TYPES = "mixinTypes";
   private static final String JCR_NODETYPE_FOLDER = "nt:folder";
   private static final String JCR_PRIMARY_TYPE = "primaryType";
 
   private static final String SLING_KEY = "key";
   private static final String SLING_MESSAGE = "message";
-  private static final List<String> SLING_MESSAGE_MIXIN_TYPE = ImmutableList.of("sling:Message");
+  private static final List<String> SLING_MESSAGE_MIXIN_TYPE = Collections.singletonList("sling:Message");
 
   private static final Namespace NAMESPACE_SLING = Namespace.getNamespace("sling", "http://sling.apache.org/jcr/sling/1.0");
   private static final Namespace NAMESPACE_JCR = Namespace.getNamespace("jcr", "http://www.jcp.org/jcr/1.0");
