@@ -26,10 +26,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Properties;
 
-import org.apache.commons.lang3.CharEncoding;
 import org.custommonkey.xmlunit.XMLAssert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -66,7 +66,7 @@ class SlingI18nMapTest {
     Properties props = new Properties();
     //Note: as the files in file-system are encoded as utf-8, we need to set it manually to override the properties default
     try (InputStream is = FileUtil.class.getClassLoader().getResourceAsStream("map/i18n-content.properties")) {
-      props.load(new InputStreamReader(is, CharEncoding.UTF_8));
+      props.load(new InputStreamReader(is, StandardCharsets.UTF_8));
     }
 
     Properties underTestProperties = new Properties();

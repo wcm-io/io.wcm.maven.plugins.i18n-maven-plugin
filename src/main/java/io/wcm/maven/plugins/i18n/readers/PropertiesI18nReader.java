@@ -23,11 +23,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-
-import org.apache.commons.lang3.CharEncoding;
 
 /**
  * Reads i18n resources from Java properties files.
@@ -39,7 +38,7 @@ public class PropertiesI18nReader implements I18nReader {
     // read properties
     Properties props = new Properties();
     try (FileInputStream is = new FileInputStream(sourceFile);
-        InputStreamReader reader = new InputStreamReader(is, CharEncoding.UTF_8)) {
+        InputStreamReader reader = new InputStreamReader(is, StandardCharsets.UTF_8)) {
       props.load(reader);
     }
 

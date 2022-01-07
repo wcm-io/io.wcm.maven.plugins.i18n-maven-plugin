@@ -21,10 +21,10 @@ package io.wcm.maven.plugins.i18n;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.commons.lang3.CharEncoding;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.model.Build;
 import org.apache.maven.model.Resource;
@@ -219,13 +219,13 @@ public class TransformMojo extends AbstractMojo {
    */
   private void writeTargetI18nFile(SlingI18nMap i18nMap, File targetfile, OutputFormat selectedOutputFormat) throws IOException, JSONException {
     if (selectedOutputFormat == OutputFormat.XML) {
-      FileUtils.fileWrite(targetfile, CharEncoding.UTF_8, i18nMap.getI18nXmlString());
+      FileUtils.fileWrite(targetfile, StandardCharsets.UTF_8.name(), i18nMap.getI18nXmlString());
     }
     else if (selectedOutputFormat == OutputFormat.PROPERTIES) {
-      FileUtils.fileWrite(targetfile, CharEncoding.ISO_8859_1, i18nMap.getI18nPropertiesString());
+      FileUtils.fileWrite(targetfile, StandardCharsets.ISO_8859_1.name(), i18nMap.getI18nPropertiesString());
     }
     else {
-      FileUtils.fileWrite(targetfile, CharEncoding.UTF_8, i18nMap.getI18nJsonString());
+      FileUtils.fileWrite(targetfile, StandardCharsets.UTF_8.name(), i18nMap.getI18nJsonString());
     }
     buildContext.refresh(targetfile);
   }
@@ -248,19 +248,23 @@ public class TransformMojo extends AbstractMojo {
 
     File parentDirectory = jsonFile.getParentFile();
     if (!parentDirectory.exists()) {
-      parentDirectory.mkdirs();
+      if (!parentDirectory.mkdirs()) {
+        throw new IOException("Unable to create directory: " + parentDirectory.getPath());
+      }
       buildContext.refresh(parentDirectory);
     }
 
     return jsonFile;
   }
 
-  private File getGeneratedResourcesFolder() {
+  private File getGeneratedResourcesFolder() throws IOException {
     if (generatedResourcesFolder == null) {
       String generatedResourcesFolderAbsolutePath = this.project.getBuild().getDirectory() + "/" + generatedResourcesFolderPath;
       generatedResourcesFolder = new File(generatedResourcesFolderAbsolutePath);
       if (!generatedResourcesFolder.exists()) {
-        generatedResourcesFolder.mkdirs();
+        if (!generatedResourcesFolder.mkdirs()) {
+          throw new IOException("Unable to create directory: " + generatedResourcesFolder.getPath());
+        }
         buildContext.refresh(generatedResourcesFolder);
       }
     }

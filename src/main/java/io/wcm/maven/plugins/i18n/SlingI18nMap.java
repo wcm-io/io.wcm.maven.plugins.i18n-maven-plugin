@@ -21,6 +21,7 @@ package io.wcm.maven.plugins.i18n;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -28,7 +29,6 @@ import java.util.Properties;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import org.apache.commons.lang3.CharEncoding;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.commons.json.JSONException;
 import org.apache.sling.commons.json.JSONObject;
@@ -238,7 +238,7 @@ class SlingI18nMap {
     try (ByteArrayOutputStream outStream = new ByteArrayOutputStream()) {
       i18nProps.store(outStream, null);
       // Property files are always ISO 8859 encoded
-      return outStream.toString(CharEncoding.ISO_8859_1);
+      return outStream.toString(StandardCharsets.ISO_8859_1.name());
     }
   }
 
