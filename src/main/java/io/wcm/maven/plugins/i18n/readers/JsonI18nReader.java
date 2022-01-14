@@ -40,7 +40,7 @@ public class JsonI18nReader implements I18nReader {
     String fileContent = IOUtils.toString(sourceFile.toURI().toURL(), StandardCharsets.UTF_8);
     try {
       JSONObject root = new JSONObject(fileContent);
-      Map<String, String> map = new HashMap<String, String>();
+      Map<String, String> map = new HashMap<>();
       parseJson(root, map, "");
       return map;
     }

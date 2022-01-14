@@ -25,6 +25,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.XMLConstants;
+
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -39,8 +41,10 @@ public class XmlI18nReader implements I18nReader {
   public Map<String, String> read(File sourceFile) throws IOException {
     try {
       SAXBuilder builder = new SAXBuilder();
+      builder.setProperty(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+      builder.setProperty(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
       Document doc = builder.build(sourceFile);
-      Map<String, String> map = new HashMap<String, String>();
+      Map<String, String> map = new HashMap<>();
       parseXml(doc.getRootElement(), map, "");
       return map;
     }
@@ -53,7 +57,7 @@ public class XmlI18nReader implements I18nReader {
     List<Element> children = node.getChildren();
     for (Element child : children) {
       String key = child.getName();
-      if (child.getChildren().size() > 0) {
+      if (!child.getChildren().isEmpty()) {
         parseXml(child, map, prefix + key + ".");
       }
       else {
