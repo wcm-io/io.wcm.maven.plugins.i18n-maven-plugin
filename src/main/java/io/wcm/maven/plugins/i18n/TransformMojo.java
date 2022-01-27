@@ -21,10 +21,10 @@ package io.wcm.maven.plugins.i18n;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.commons.lang3.CharEncoding;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.model.Build;
 import org.apache.maven.model.Resource;
@@ -149,7 +149,7 @@ public class TransformMojo extends AbstractMojo {
 
   /**
    * Initialize parameters, which cannot get defaults from annotations. Currently only the root nodes.
-   * @throws IOException
+   * @throws IOException I/O exception
    */
   private void intialize(File sourceDirectory) throws IOException {
     getLog().debug("Initializing i18n plugin...");
@@ -179,7 +179,6 @@ public class TransformMojo extends AbstractMojo {
    * Fetches i18n source files from source directory.
    * @param sourceDirectory Source directory
    * @return a list of XML files
-   * @throws IOException
    */
   @SuppressWarnings("unchecked")
   private List<File> getI18nSourceFiles(File sourceDirectory) throws IOException {
@@ -203,7 +202,6 @@ public class TransformMojo extends AbstractMojo {
   /**
    * Get directory containing source i18n files.
    * @return directory containing source i18n files.
-   * @throws IOException
    */
   private File getSourceDirectory() throws IOException {
     File file = new File(source);
@@ -218,18 +216,16 @@ public class TransformMojo extends AbstractMojo {
    * @param i18nMap mappings
    * @param targetfile target file
    * @param selectedOutputFormat Output format
-   * @throws IOException
-   * @throws JSONException
    */
   private void writeTargetI18nFile(SlingI18nMap i18nMap, File targetfile, OutputFormat selectedOutputFormat) throws IOException, JSONException {
     if (selectedOutputFormat == OutputFormat.XML) {
-      FileUtils.fileWrite(targetfile, CharEncoding.UTF_8, i18nMap.getI18nXmlString());
+      FileUtils.fileWrite(targetfile, StandardCharsets.UTF_8.name(), i18nMap.getI18nXmlString());
     }
     else if (selectedOutputFormat == OutputFormat.PROPERTIES) {
-      FileUtils.fileWrite(targetfile, CharEncoding.ISO_8859_1, i18nMap.getI18nPropertiesString());
+      FileUtils.fileWrite(targetfile, StandardCharsets.ISO_8859_1.name(), i18nMap.getI18nPropertiesString());
     }
     else {
-      FileUtils.fileWrite(targetfile, CharEncoding.UTF_8, i18nMap.getI18nJsonString());
+      FileUtils.fileWrite(targetfile, StandardCharsets.UTF_8.name(), i18nMap.getI18nJsonString());
     }
     buildContext.refresh(targetfile);
   }
@@ -239,7 +235,6 @@ public class TransformMojo extends AbstractMojo {
    * @param sourceFile the source file
    * @param selectedOutputFormat Output format
    * @return File with name and path based on file parameter
-   * @throws IOException
    */
   private File getTargetFile(File sourceFile, OutputFormat selectedOutputFormat) throws IOException {
 
@@ -253,19 +248,23 @@ public class TransformMojo extends AbstractMojo {
 
     File parentDirectory = jsonFile.getParentFile();
     if (!parentDirectory.exists()) {
-      parentDirectory.mkdirs();
+      if (!parentDirectory.mkdirs()) {
+        throw new IOException("Unable to create directory: " + parentDirectory.getPath());
+      }
       buildContext.refresh(parentDirectory);
     }
 
     return jsonFile;
   }
 
-  private File getGeneratedResourcesFolder() {
+  private File getGeneratedResourcesFolder() throws IOException {
     if (generatedResourcesFolder == null) {
       String generatedResourcesFolderAbsolutePath = this.project.getBuild().getDirectory() + "/" + generatedResourcesFolderPath;
       generatedResourcesFolder = new File(generatedResourcesFolderAbsolutePath);
       if (!generatedResourcesFolder.exists()) {
-        generatedResourcesFolder.mkdirs();
+        if (!generatedResourcesFolder.mkdirs()) {
+          throw new IOException("Unable to create directory: " + generatedResourcesFolder.getPath());
+        }
         buildContext.refresh(generatedResourcesFolder);
       }
     }
@@ -276,7 +275,6 @@ public class TransformMojo extends AbstractMojo {
    * Get i18n reader for source file.
    * @param sourceFile Source file
    * @return I18n reader
-   * @throws MojoFailureException
    */
   private I18nReader getI18nReader(File sourceFile) throws MojoFailureException {
     String extension = FileUtils.getExtension(sourceFile.getName());

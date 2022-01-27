@@ -21,11 +21,11 @@ package io.wcm.maven.plugins.i18n.readers;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.CharEncoding;
 import org.apache.sling.commons.json.JSONArray;
 import org.apache.sling.commons.json.JSONException;
 import org.apache.sling.commons.json.JSONObject;
@@ -37,10 +37,10 @@ public class JsonI18nReader implements I18nReader {
 
   @Override
   public Map<String, String> read(File sourceFile) throws IOException {
-    String fileContent = IOUtils.toString(sourceFile.toURI().toURL(), CharEncoding.UTF_8);
+    String fileContent = IOUtils.toString(sourceFile.toURI().toURL(), StandardCharsets.UTF_8);
     try {
       JSONObject root = new JSONObject(fileContent);
-      Map<String, String> map = new HashMap<String, String>();
+      Map<String, String> map = new HashMap<>();
       parseJson(root, map, "");
       return map;
     }
