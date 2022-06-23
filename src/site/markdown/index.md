@@ -3,7 +3,7 @@ About i18n Maven Plugin
 
 Transforms and validates i18n resources for usage in Sling/AEM applications.
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.wcm.maven.plugins/i18n-maven-plugin/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.wcm.maven.plugins/i18n-maven-plugin)
+[![Maven Central](https://img.shields.io/maven-central/v/io.wcm.maven.plugins/i18n-maven-plugin)](https://repo1.maven.org/maven2/io/wcm/maven/plugins/i18n-maven-plugin)
 
 
 ### Documentation
