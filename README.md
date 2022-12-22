@@ -7,7 +7,7 @@
 Transforms and validates i18n resources for usage in Sling/AEM applications.
 
 Documentation: https://wcm.io/tooling/maven/plugins/i18n-maven-plugin/<br/>
-Issues: https://wcm-io.atlassian.net/browse/WTOOL<br/>
+Issues: https://github.com/wcm-io/io.wcm.maven.plugins.i18n-maven-plugin/issues<br/>
 Wiki: https://wcm-io.atlassian.net/wiki/<br/>
 Continuous Integration: https://github.com/wcm-io/io.wcm.maven.plugins.i18n-maven-plugin/actions<br/>
 Commercial support: https://wcm.io/commercial-support.html
