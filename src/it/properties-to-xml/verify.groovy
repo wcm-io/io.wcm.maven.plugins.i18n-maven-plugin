@@ -1,4 +1,4 @@
-import groovy.util.XmlSlurper
+import groovy.xml.XmlSlurper
 
 File xmlFile = new File(basedir, "target/classes/SLING-INF/app-root/i18n/en.xml")
 assert xmlFile.exists();
