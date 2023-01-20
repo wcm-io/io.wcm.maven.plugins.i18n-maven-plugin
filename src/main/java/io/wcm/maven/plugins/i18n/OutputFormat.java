@@ -19,8 +19,6 @@
  */
 package io.wcm.maven.plugins.i18n;
 
-import org.apache.commons.lang3.StringUtils;
-
 /**
  * Output format for Sling i18n message file.
  */
@@ -29,23 +27,34 @@ enum OutputFormat {
   /**
    * JCR JSON
    */
-  JSON,
+  JSON("json"),
+
+  /**
+   * Flat list of properties in JSON format.
+   */
+  JSON_PROPERTIES("json"),
 
   /**
    * JCR XML
    */
-  XML,
+  XML("xml"),
 
   /**
    * PROPERTIES
    */
-  PROPERTIES;
+  PROPERTIES("properties");
+
+  private final String fileExtension;
+
+  OutputFormat(String fileExtension) {
+    this.fileExtension = fileExtension;
+  }
 
   /**
    * @return File extension
    */
   public String getFileExtension() {
-    return StringUtils.lowerCase(this.name());
+    return this.fileExtension;
   }
 
 }

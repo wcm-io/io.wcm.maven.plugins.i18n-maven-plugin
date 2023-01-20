@@ -80,6 +80,14 @@ class SlingI18nMap {
     return JsonUtil.toString(buildI18nJson());
   }
 
+  /**
+   * Build i18n resource JSON in Sling i18n Message format.
+   * @return JSON
+   */
+  public String getI18nJsonPropertiesString() {
+    return JsonUtil.toString(buildI18nJsonProperties());
+  }
+
   private JsonObject buildI18nJson() {
 
     // get root
@@ -92,6 +100,20 @@ class SlingI18nMap {
       JsonObject value = getJsonI18nValue(key, entry.getValue(), !StringUtils.equals(key, escapedKey));
 
       jsonDocument.add(escapedKey, value);
+    }
+
+    // return result
+    return jsonDocument.build();
+  }
+
+  private JsonObject buildI18nJsonProperties() {
+    JsonObjectBuilder jsonDocument = Json.createObjectBuilder();
+
+    // add entries
+    for (Entry<String, String> entry : properties.entrySet()) {
+      String key = entry.getKey();
+      String escapedKey = validName(key);
+      jsonDocument.add(escapedKey, entry.getValue());
     }
 
     // return result

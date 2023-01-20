@@ -57,6 +57,11 @@ class SlingI18nMapTest {
   }
 
   @Test
+  void testGetI18nJsonPropertiesString() throws Exception {
+    JSONAssert.assertEquals(getStringFromClasspath("map/i18n-properties.json"), underTest.getI18nJsonPropertiesString(), true);
+  }
+
+  @Test
   void testGetI18nXmlString() throws Exception {
     XMLAssert.assertXMLEqual(getStringFromClasspath("map/i18n-content.xml"), underTest.getI18nXmlString());
   }
