@@ -25,10 +25,12 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.json.JsonObject;
+import javax.json.JsonValue;
+
 import org.apache.commons.io.IOUtils;
-import org.apache.sling.commons.json.JSONArray;
-import org.apache.sling.commons.json.JSONException;
-import org.apache.sling.commons.json.JSONObject;
+
+import io.wcm.maven.plugins.i18n.JsonUtil;
 
 /**
  * Reads i18n resources from JSON files.
@@ -37,34 +39,32 @@ public class JsonI18nReader implements I18nReader {
 
   @Override
   public Map<String, String> read(File sourceFile) throws IOException {
+
     String fileContent = IOUtils.toString(sourceFile.toURI().toURL(), StandardCharsets.UTF_8);
     try {
-      JSONObject root = new JSONObject(fileContent);
+      JsonObject root = JsonUtil.fromString(fileContent);
       Map<String, String> map = new HashMap<>();
       parseJson(root, map, "");
       return map;
     }
-    catch (JSONException ex) {
+    catch (IOException ex) {
       throw new IOException("Unable to read JSON from " + sourceFile.getAbsolutePath(), ex);
     }
   }
 
-  private void parseJson(JSONObject node, Map<String, String> map, String prefix) throws IOException, JSONException {
-    JSONArray names = node.names();
-    if (names == null) {
-      return;
-    }
-    for (int i = 0; i < names.length(); i++) {
-      String key = names.getString(i);
-      Object item = node.get(key);
-      if (item instanceof JSONObject) {
-        parseJson((JSONObject)item, map, prefix + key + ".");
-      }
-      else if (item instanceof String) {
-        map.put(prefix + key, (String)item);
-      }
-      else {
-        throw new IOException("Unsupported JSON value: " + item.getClass().getName());
+  private void parseJson(JsonObject node, Map<String, String> map, String prefix) throws IOException {
+    for (Map.Entry<String, JsonValue> entry : node.entrySet()) {
+      String key = entry.getKey();
+      JsonValue value = entry.getValue();
+      switch (value.getValueType()) {
+        case OBJECT:
+          parseJson(value.asJsonObject(), map, prefix + key + ".");
+          break;
+        case STRING:
+          map.put(prefix + key, node.getString(key));
+          break;
+        default:
+          throw new IOException("Unsupported JSON value: " + node.getValueType());
       }
     }
   }

@@ -36,7 +36,6 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
-import org.apache.sling.commons.json.JSONException;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.Scanner;
 import org.sonatype.plexus.build.incremental.BuildContext;
@@ -119,7 +118,7 @@ public class TransformMojo extends AbstractMojo {
 
           getLog().info("Transformed " + file.getPath() + " to  " + targetFile.getPath());
         }
-        catch (IOException | JSONException ex) {
+        catch (IOException ex) {
           throw new MojoFailureException("Unable to transform i18n resource: " + file.getPath(), ex);
         }
       }
@@ -216,7 +215,7 @@ public class TransformMojo extends AbstractMojo {
    * @param targetfile target file
    * @param selectedOutputFormat Output format
    */
-  private void writeTargetI18nFile(SlingI18nMap i18nMap, File targetfile, OutputFormat selectedOutputFormat) throws IOException, JSONException {
+  private void writeTargetI18nFile(SlingI18nMap i18nMap, File targetfile, OutputFormat selectedOutputFormat) throws IOException {
     if (selectedOutputFormat == OutputFormat.XML) {
       FileUtils.fileWrite(targetfile, StandardCharsets.UTF_8.name(), i18nMap.getI18nXmlString());
     }
