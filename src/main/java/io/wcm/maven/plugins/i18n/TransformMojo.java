@@ -180,7 +180,6 @@ public class TransformMojo extends AbstractMojo {
    * @param sourceDirectory Source directory
    * @return a list of XML files
    */
-  @SuppressWarnings("unchecked")
   private List<File> getI18nSourceFiles(File sourceDirectory) throws IOException {
 
     if (i18nSourceFiles == null) {
