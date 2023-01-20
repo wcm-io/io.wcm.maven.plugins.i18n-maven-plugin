@@ -24,7 +24,7 @@
   <body>
 
     <release version="1.3.0" date="not released">
-      <action type="add" dev="sseifert">
+      <action type="add" dev="sseifert" issue="9">
         Introduce new output format JSON_PROPERTIES: Flat list of key/value pairs in JSON format.
       </action>
       <action type="update" dev="sseifert">
