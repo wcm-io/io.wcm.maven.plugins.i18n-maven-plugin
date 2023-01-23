@@ -27,7 +27,7 @@
       <action type="add" dev="sseifert" issue="9">
         Introduce new output format JSON_PROPERTIES: Flat list of key/value pairs in JSON format.
       </action>
-      <action type="update" dev="sseifert">
+      <action type="update" dev="sseifert" issue="8">
         Switch from org.apache.sling.commons.json to Johnzon (javax.json).
       </action>
       <action type="update" dev="sseifert">
