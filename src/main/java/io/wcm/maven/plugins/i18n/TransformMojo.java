@@ -75,9 +75,15 @@ public class TransformMojo extends AbstractMojo {
   private String target;
 
   /**
-   * Output format for i18n: <code>json</code>, <code>xml</code> or <code>properties</code>.
+   * Output format. Possible values:
+   * <ul>
+   * <li><code>JSON</code>: Sling Message format serialized as JSON.</li>
+   * <li><code>JSON_PROPERTIES</code>: Flat list of key/value pairs in JSON format.</li>
+   * <li><code>XML</code>: Sling Message format serialized as JCR XML.</li>
+   * <li><code>PROPERTIES</code>: Flat list of key/value pairs in Java Properties format.</li>
+   * </ul>
    */
-  @Parameter(defaultValue = "json")
+  @Parameter(defaultValue = "JSON")
   private String outputFormat;
 
   @Parameter(defaultValue = "generated-i18n-resources")
@@ -216,14 +222,22 @@ public class TransformMojo extends AbstractMojo {
    * @param selectedOutputFormat Output format
    */
   private void writeTargetI18nFile(SlingI18nMap i18nMap, File targetfile, OutputFormat selectedOutputFormat) throws IOException {
-    if (selectedOutputFormat == OutputFormat.XML) {
-      FileUtils.fileWrite(targetfile, StandardCharsets.UTF_8.name(), i18nMap.getI18nXmlString());
-    }
-    else if (selectedOutputFormat == OutputFormat.PROPERTIES) {
-      FileUtils.fileWrite(targetfile, StandardCharsets.ISO_8859_1.name(), i18nMap.getI18nPropertiesString());
-    }
-    else {
-      FileUtils.fileWrite(targetfile, StandardCharsets.UTF_8.name(), i18nMap.getI18nJsonString());
+    switch (selectedOutputFormat) {
+      case XML:
+        FileUtils.fileWrite(targetfile, StandardCharsets.UTF_8.name(), i18nMap.getI18nXmlString());
+        break;
+      case PROPERTIES:
+        FileUtils.fileWrite(targetfile, StandardCharsets.ISO_8859_1.name(), i18nMap.getI18nPropertiesString());
+        break;
+      case JSON:
+        FileUtils.fileWrite(targetfile, StandardCharsets.UTF_8.name(), i18nMap.getI18nJsonString());
+        break;
+      case JSON_PROPERTIES:
+        FileUtils.fileWrite(targetfile, StandardCharsets.UTF_8.name(), i18nMap.getI18nJsonPropertiesString());
+        break;
+      default:
+        throw new IllegalArgumentException("Unsupported ouptut format: " + selectedOutputFormat);
+
     }
     buildContext.refresh(targetfile);
   }
