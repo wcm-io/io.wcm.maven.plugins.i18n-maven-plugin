@@ -31,7 +31,7 @@
 
   <groupId>io.wcm.maven.plugins</groupId>
   <artifactId>i18n-maven-plugin</artifactId>
-  <version>1.3.0</version>
+  <version>1.3.1-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
 
   <name>i18n Maven Plugin</name>
@@ -50,7 +50,7 @@
     <maven.version>3.0.5</maven.version>
 
     <!-- Enable reproducible builds -->
-    <project.build.outputTimestamp>2023-01-26T09:06:49Z</project.build.outputTimestamp>
+    <project.build.outputTimestamp>2023-01-26T10:05:55Z</project.build.outputTimestamp>
 
     <!-- Enable recording of coverage during execution of maven-invoker-plugin -->
     <jacoco.propertyName>invoker.mavenOpts</jacoco.propertyName>
