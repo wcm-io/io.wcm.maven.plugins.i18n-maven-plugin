@@ -36,7 +36,6 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
-import org.apache.sling.commons.json.JSONException;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.Scanner;
 import org.sonatype.plexus.build.incremental.BuildContext;
@@ -76,9 +75,15 @@ public class TransformMojo extends AbstractMojo {
   private String target;
 
   /**
-   * Output format for i18n: <code>json</code>, <code>xml</code> or <code>properties</code>.
+   * Output format. Possible values:
+   * <ul>
+   * <li><code>JSON</code>: Sling Message format serialized as JSON.</li>
+   * <li><code>JSON_PROPERTIES</code>: Flat list of key/value pairs in JSON format.</li>
+   * <li><code>XML</code>: Sling Message format serialized as JCR XML.</li>
+   * <li><code>PROPERTIES</code>: Flat list of key/value pairs in Java Properties format.</li>
+   * </ul>
    */
-  @Parameter(defaultValue = "json")
+  @Parameter(defaultValue = "JSON")
   private String outputFormat;
 
   @Parameter(defaultValue = "generated-i18n-resources")
@@ -119,7 +124,7 @@ public class TransformMojo extends AbstractMojo {
 
           getLog().info("Transformed " + file.getPath() + " to  " + targetFile.getPath());
         }
-        catch (IOException | JSONException ex) {
+        catch (IOException ex) {
           throw new MojoFailureException("Unable to transform i18n resource: " + file.getPath(), ex);
         }
       }
@@ -180,7 +185,6 @@ public class TransformMojo extends AbstractMojo {
    * @param sourceDirectory Source directory
    * @return a list of XML files
    */
-  @SuppressWarnings("unchecked")
   private List<File> getI18nSourceFiles(File sourceDirectory) throws IOException {
 
     if (i18nSourceFiles == null) {
@@ -217,15 +221,23 @@ public class TransformMojo extends AbstractMojo {
    * @param targetfile target file
    * @param selectedOutputFormat Output format
    */
-  private void writeTargetI18nFile(SlingI18nMap i18nMap, File targetfile, OutputFormat selectedOutputFormat) throws IOException, JSONException {
-    if (selectedOutputFormat == OutputFormat.XML) {
-      FileUtils.fileWrite(targetfile, StandardCharsets.UTF_8.name(), i18nMap.getI18nXmlString());
-    }
-    else if (selectedOutputFormat == OutputFormat.PROPERTIES) {
-      FileUtils.fileWrite(targetfile, StandardCharsets.ISO_8859_1.name(), i18nMap.getI18nPropertiesString());
-    }
-    else {
-      FileUtils.fileWrite(targetfile, StandardCharsets.UTF_8.name(), i18nMap.getI18nJsonString());
+  private void writeTargetI18nFile(SlingI18nMap i18nMap, File targetfile, OutputFormat selectedOutputFormat) throws IOException {
+    switch (selectedOutputFormat) {
+      case XML:
+        FileUtils.fileWrite(targetfile, StandardCharsets.UTF_8.name(), i18nMap.getI18nXmlString());
+        break;
+      case PROPERTIES:
+        FileUtils.fileWrite(targetfile, StandardCharsets.ISO_8859_1.name(), i18nMap.getI18nPropertiesString());
+        break;
+      case JSON:
+        FileUtils.fileWrite(targetfile, StandardCharsets.UTF_8.name(), i18nMap.getI18nJsonString());
+        break;
+      case JSON_PROPERTIES:
+        FileUtils.fileWrite(targetfile, StandardCharsets.UTF_8.name(), i18nMap.getI18nJsonPropertiesString());
+        break;
+      default:
+        throw new IllegalArgumentException("Unsupported ouptut format: " + selectedOutputFormat);
+
     }
     buildContext.refresh(targetfile);
   }

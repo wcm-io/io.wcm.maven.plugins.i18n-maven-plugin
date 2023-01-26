@@ -23,6 +23,18 @@
     xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/plugins/maven-changes-plugin/xsd/changes-1.0.0.xsd">
   <body>
 
+    <release version="1.3.0" date="2023-01-26">
+      <action type="add" dev="sseifert" issue="9">
+        Introduce new output format JSON_PROPERTIES: Flat list of key/value pairs in JSON format.
+      </action>
+      <action type="update" dev="sseifert" issue="8">
+        Switch from org.apache.sling.commons.json to Johnzon (javax.json).
+      </action>
+      <action type="update" dev="sseifert">
+        Switch to Java 11 as minimum version.
+      </action>
+    </release>
+
     <release version="1.2.2" date="2022-01-27">
       <action type="update" dev="sseifert">
         Declare Maven core dependencies as provided.

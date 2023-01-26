@@ -30,9 +30,11 @@ import java.util.Properties;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
+
 import org.apache.commons.lang3.StringUtils;
-import org.apache.sling.commons.json.JSONException;
-import org.apache.sling.commons.json.JSONObject;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.Namespace;
@@ -74,57 +76,79 @@ class SlingI18nMap {
    * Build i18n resource JSON in Sling i18n Message format.
    * @return JSON
    */
-  public String getI18nJsonString() throws JSONException {
-    return buildI18nJson().toString(2);
+  public String getI18nJsonString() {
+    return JsonUtil.toString(buildI18nJson());
   }
 
-  private JSONObject buildI18nJson() throws JSONException {
+  /**
+   * Build i18n resource JSON in Sling i18n Message format.
+   * @return JSON
+   */
+  public String getI18nJsonPropertiesString() {
+    return JsonUtil.toString(buildI18nJsonProperties());
+  }
+
+  private JsonObject buildI18nJson() {
 
     // get root
-    JSONObject jsonDocument = getMixLanguageJsonDocument();
+    JsonObjectBuilder jsonDocument = getMixLanguageJsonDocument();
 
     // add entries
     for (Entry<String, String> entry : properties.entrySet()) {
       String key = entry.getKey();
       String escapedKey = validName(key);
-      JSONObject value = getJsonI18nValue(key, entry.getValue(), !StringUtils.equals(key, escapedKey));
+      JsonObject value = getJsonI18nValue(key, entry.getValue(), !StringUtils.equals(key, escapedKey));
 
-      jsonDocument.put(escapedKey, value);
+      jsonDocument.add(escapedKey, value);
     }
 
     // return result
-    return jsonDocument;
+    return jsonDocument.build();
   }
 
-  private JSONObject getMixLanguageJsonDocument() throws JSONException {
-    JSONObject root = new JSONObject();
+  private JsonObject buildI18nJsonProperties() {
+    JsonObjectBuilder jsonDocument = Json.createObjectBuilder();
+
+    // add entries
+    for (Entry<String, String> entry : properties.entrySet()) {
+      String key = entry.getKey();
+      String escapedKey = validName(key);
+      jsonDocument.add(escapedKey, entry.getValue());
+    }
+
+    // return result
+    return jsonDocument.build();
+  }
+
+  private JsonObjectBuilder getMixLanguageJsonDocument() {
+    JsonObjectBuilder root = Json.createObjectBuilder();
 
     // add boiler plate
-    root.put("jcr:" + JCR_PRIMARY_TYPE, JCR_NODETYPE_FOLDER);
-    root.put("jcr:" + JCR_MIXIN_TYPES, JCR_MIX_LANGUAGE);
+    root.add("jcr:" + JCR_PRIMARY_TYPE, JCR_NODETYPE_FOLDER);
+    root.add("jcr:" + JCR_MIXIN_TYPES, Json.createArrayBuilder(JCR_MIX_LANGUAGE).build());
 
     // add language
-    root.put("jcr:" + JCR_LANGUAGE, languageKey);
+    root.add("jcr:" + JCR_LANGUAGE, languageKey);
 
     return root;
   }
 
-  private JSONObject getJsonI18nValue(String key, String value, boolean generatedKeyProperty) throws JSONException {
-    JSONObject valueNode = new JSONObject();
+  private JsonObject getJsonI18nValue(String key, String value, boolean generatedKeyProperty) {
+    JsonObjectBuilder valueNode = Json.createObjectBuilder();
 
     // add boiler plate
-    valueNode.put("jcr:" + JCR_PRIMARY_TYPE, JCR_NODETYPE_FOLDER);
-    valueNode.put("jcr:" + JCR_MIXIN_TYPES, SLING_MESSAGE_MIXIN_TYPE);
+    valueNode.add("jcr:" + JCR_PRIMARY_TYPE, JCR_NODETYPE_FOLDER);
+    valueNode.add("jcr:" + JCR_MIXIN_TYPES, Json.createArrayBuilder(SLING_MESSAGE_MIXIN_TYPE).build());
 
     // add extra key attribute
     if (generatedKeyProperty) {
-      valueNode.put("sling:" + SLING_KEY, key);
+      valueNode.add("sling:" + SLING_KEY, key);
     }
 
     // add actual i18n value
-    valueNode.put("sling:" + SLING_MESSAGE, value);
+    valueNode.add("sling:" + SLING_MESSAGE, value);
 
-    return valueNode;
+    return valueNode.build();
   }
 
   /**
