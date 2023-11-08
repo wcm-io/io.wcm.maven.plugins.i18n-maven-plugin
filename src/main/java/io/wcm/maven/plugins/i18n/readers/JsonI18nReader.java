@@ -25,12 +25,11 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.json.JsonObject;
-import javax.json.JsonValue;
-
 import org.apache.commons.io.IOUtils;
 
 import io.wcm.maven.plugins.i18n.JsonUtil;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonValue;
 
 /**
  * Reads i18n resources from JSON files.
