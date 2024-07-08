@@ -56,10 +56,11 @@ public class TransformMojo extends AbstractMojo {
   private static final String FILE_EXTENSION_XML = "xml";
   private static final String FILE_EXTENSION_PROPERTIES = "properties";
 
+  private static final String ALL_FILES = "**/*.";
   private static final String[] SOURCE_FILES_INCLUDES = new String[] {
-      "**/*." + FILE_EXTENSION_PROPERTIES,
-      "**/*." + FILE_EXTENSION_XML,
-      "**/*." + FILE_EXTENSION_JSON
+      ALL_FILES + FILE_EXTENSION_PROPERTIES,
+      ALL_FILES + FILE_EXTENSION_XML,
+      ALL_FILES + FILE_EXTENSION_JSON
   };
 
   /**
@@ -112,25 +113,29 @@ public class TransformMojo extends AbstractMojo {
 
       List<File> sourceFiles = getI18nSourceFiles(sourceDirectory);
       for (File file : sourceFiles) {
-        try {
-          // transform i18n files
-          String languageKey = FileUtils.removeExtension(file.getName());
-          I18nReader reader = getI18nReader(file);
-          SlingI18nMap i18nMap = new SlingI18nMap(languageKey, reader.read(file));
-
-          // write mappings to target file
-          File targetFile = getTargetFile(file, selectedOutputFormat);
-          writeTargetI18nFile(i18nMap, targetFile, selectedOutputFormat);
-
-          getLog().info("Transformed " + file.getPath() + " to  " + targetFile.getPath());
-        }
-        catch (IOException ex) {
-          throw new MojoFailureException("Unable to transform i18n resource: " + file.getPath(), ex);
-        }
+        transformFile(file, selectedOutputFormat);
       }
     }
     catch (IOException ex) {
       throw new MojoFailureException("Failure to transform i18n resources", ex);
+    }
+  }
+
+  private void transformFile(File file, OutputFormat selectedOutputFormat) throws MojoFailureException {
+    try {
+      // transform i18n files
+      String languageKey = FileUtils.removeExtension(file.getName());
+      I18nReader reader = getI18nReader(file);
+      SlingI18nMap i18nMap = new SlingI18nMap(languageKey, reader.read(file));
+
+      // write mappings to target file
+      File targetFile = getTargetFile(file, selectedOutputFormat);
+      writeTargetI18nFile(i18nMap, targetFile, selectedOutputFormat);
+
+      getLog().info("Transformed " + file.getPath() + " to  " + targetFile.getPath());
+    }
+    catch (IOException ex) {
+      throw new MojoFailureException("Unable to transform i18n resource: " + file.getPath(), ex);
     }
   }
 
@@ -271,8 +276,7 @@ public class TransformMojo extends AbstractMojo {
 
   private File getGeneratedResourcesFolder() throws IOException {
     if (generatedResourcesFolder == null) {
-      String generatedResourcesFolderAbsolutePath = this.project.getBuild().getDirectory() + "/" + generatedResourcesFolderPath;
-      generatedResourcesFolder = new File(generatedResourcesFolderAbsolutePath);
+      generatedResourcesFolder = new File(this.project.getBuild().getDirectory(), generatedResourcesFolderPath);
       if (!generatedResourcesFolder.exists()) {
         if (!generatedResourcesFolder.mkdirs()) {
           throw new IOException("Unable to create directory: " + generatedResourcesFolder.getPath());
