@@ -47,7 +47,7 @@
 
   <properties>
     <site.url.module.prefix>tooling/maven/plugins/i18n-maven-plugin</site.url.module.prefix>
-    <maven.version>3.0.5</maven.version>
+    <maven.version>3.9.9</maven.version>
 
     <!-- Enable reproducible builds -->
     <project.build.outputTimestamp>2023-01-26T10:05:55Z</project.build.outputTimestamp>
