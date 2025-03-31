@@ -27,34 +27,31 @@ import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
-import com.google.common.collect.ImmutableMap;
-
 class I18nReaderTest {
 
-  private static final Map<String, String> EXPECTED_MAP = ImmutableMap.<String, String>builder()
-      .put("key1", "value1")
-      .put("key21.key22.key23", "value 2")
-      .put("key3", "valueäöüß€")
-      .build();
+  private static final Map<String, String> EXPECTED_MAP = Map.of(
+      "key1", "value1",
+      "key21.key22.key23", "value 2",
+      "key3", "valueäöüß€");
 
   @Test
   void testProperties() throws Exception {
     File sampleFile = getFileFromClasspath("readers/sampleI18n.properties");
-    Map<String, String> result = ImmutableMap.copyOf(new PropertiesI18nReader().read(sampleFile));
+    Map<String, String> result = Map.copyOf(new PropertiesI18nReader().read(sampleFile));
     assertEquals(EXPECTED_MAP, result);
   }
 
   @Test
   void testXml() throws Exception {
     File sampleFile = getFileFromClasspath("readers/sampleI18n.xml");
-    Map<String, String> result = ImmutableMap.copyOf(new XmlI18nReader().read(sampleFile));
+    Map<String, String> result = Map.copyOf(new XmlI18nReader().read(sampleFile));
     assertEquals(EXPECTED_MAP, result);
   }
 
   @Test
   void testJson() throws Exception {
     File sampleFile = getFileFromClasspath("readers/sampleI18n.json");
-    Map<String, String> result = ImmutableMap.copyOf(new JsonI18nReader().read(sampleFile));
+    Map<String, String> result = Map.copyOf(new JsonI18nReader().read(sampleFile));
     assertEquals(EXPECTED_MAP, result);
   }
 

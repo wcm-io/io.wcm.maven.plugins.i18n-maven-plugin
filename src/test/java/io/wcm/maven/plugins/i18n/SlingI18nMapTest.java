@@ -35,20 +35,17 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 
-import com.google.common.collect.ImmutableMap;
-
 class SlingI18nMapTest {
 
   private SlingI18nMap underTest;
 
   @BeforeEach
   void setUp() {
-    underTest = new SlingI18nMap("en", ImmutableMap.<String, String>builder()
-        .put("key1", "value1")
-        .put("key2.key21.key211", "value2")
-        .put("key3 with special chars äöüß€", "value3")
-        .put("key4", "value4 äöüß€")
-        .build());
+    underTest = new SlingI18nMap("en", Map.of(
+        "key1", "value1",
+        "key2.key21.key211", "value2",
+        "key3 with special chars äöüß€", "value3",
+        "key4", "value4 äöüß€"));
   }
 
   @Test

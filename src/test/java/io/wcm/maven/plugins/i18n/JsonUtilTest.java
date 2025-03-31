@@ -23,12 +23,11 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 
-import javax.json.Json;
-import javax.json.JsonObject;
-
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 
+import jakarta.json.Json;
+import jakarta.json.JsonObject;
 
 class JsonUtilTest {
 
