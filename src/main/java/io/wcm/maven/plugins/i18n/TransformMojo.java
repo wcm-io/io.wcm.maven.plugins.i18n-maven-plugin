@@ -25,13 +25,15 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.apache.maven.model.Build;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -93,7 +95,7 @@ public class TransformMojo extends AbstractMojo {
   @Parameter(property = "project", required = true, readonly = true)
   private MavenProject project;
 
-  @Component
+  @Inject
   private BuildContext buildContext;
 
   private File generatedResourcesFolder;
@@ -294,13 +296,13 @@ public class TransformMojo extends AbstractMojo {
    */
   private I18nReader getI18nReader(File sourceFile) throws MojoFailureException {
     String extension = FileUtils.getExtension(sourceFile.getName());
-    if (StringUtils.equalsIgnoreCase(extension, FILE_EXTENSION_PROPERTIES)) {
+    if (Strings.CI.equals(extension, FILE_EXTENSION_PROPERTIES)) {
       return new PropertiesI18nReader();
     }
-    if (StringUtils.equalsIgnoreCase(extension, FILE_EXTENSION_XML)) {
+    if (Strings.CI.equals(extension, FILE_EXTENSION_XML)) {
       return new XmlI18nReader();
     }
-    if (StringUtils.equalsIgnoreCase(extension, FILE_EXTENSION_JSON)) {
+    if (Strings.CI.equals(extension, FILE_EXTENSION_JSON)) {
       return new JsonI18nReader();
     }
     throw new MojoFailureException("Unsupported file extension '" + extension + "': " + sourceFile.getAbsolutePath());

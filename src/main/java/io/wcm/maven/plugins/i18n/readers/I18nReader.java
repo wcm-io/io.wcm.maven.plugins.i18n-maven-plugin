@@ -29,6 +29,7 @@ import java.util.Map;
 public interface I18nReader {
 
   /**
+   * Read file.
    * @param sourceFile Source file
    * @return I18n resources
    * @throws IOException I/O exception
