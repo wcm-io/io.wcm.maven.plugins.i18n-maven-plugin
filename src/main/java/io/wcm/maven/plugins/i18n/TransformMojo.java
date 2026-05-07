@@ -51,6 +51,7 @@ import io.wcm.maven.plugins.i18n.readers.XmlI18nReader;
  * Transform i18n resources in Java Properties, JSON or XML file format to Sling i18n Messages JSON or XML format.
  */
 @Mojo(name = "transform", defaultPhase = LifecyclePhase.GENERATE_RESOURCES, requiresProject = true, threadSafe = true)
+@SuppressWarnings("java:S6813") // allow field injection
 public class TransformMojo extends AbstractMojo {
 
   // file extensions
