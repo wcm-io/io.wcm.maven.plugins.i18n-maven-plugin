@@ -21,6 +21,7 @@ package io.wcm.maven.plugins.i18n;
 
 import static io.wcm.maven.plugins.i18n.FileUtil.getStringFromClasspath;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.InputStream;
@@ -30,10 +31,11 @@ import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Properties;
 
-import org.custommonkey.xmlunit.XMLAssert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
+import org.xmlunit.builder.DiffBuilder;
+import org.xmlunit.diff.Diff;
 
 class SlingI18nMapTest {
 
@@ -60,7 +62,11 @@ class SlingI18nMapTest {
 
   @Test
   void testGetI18nXmlString() throws Exception {
-    XMLAssert.assertXMLEqual(getStringFromClasspath("map/i18n-content.xml"), underTest.getI18nXmlString());
+    Diff diff = DiffBuilder.compare(getStringFromClasspath("map/i18n-content.xml"))
+      .withTest(underTest.getI18nXmlString())
+      .ignoreWhitespace()
+      .build();
+    assertFalse(diff.hasDifferences(), diff::toString);
   }
 
   @Test

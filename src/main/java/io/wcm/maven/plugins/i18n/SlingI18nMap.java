@@ -31,6 +31,7 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.Namespace;
@@ -97,7 +98,7 @@ class SlingI18nMap {
     for (Entry<String, String> entry : properties.entrySet()) {
       String key = entry.getKey();
       String escapedKey = validName(key);
-      JsonObject value = getJsonI18nValue(key, entry.getValue(), !StringUtils.equals(key, escapedKey));
+      JsonObject value = getJsonI18nValue(key, entry.getValue(), !Strings.CS.equals(key, escapedKey));
 
       jsonDocument.add(escapedKey, value);
     }
@@ -170,7 +171,7 @@ class SlingI18nMap {
     for (Entry<String, String> entry : properties.entrySet()) {
       String key = entry.getKey();
       String escapedKey = validName(key);
-      Element value = getXmlI18nValue(escapedKey, key, entry.getValue(), !StringUtils.equals(key, escapedKey));
+      Element value = getXmlI18nValue(escapedKey, key, entry.getValue(), !Strings.CS.equals(key, escapedKey));
 
       xmlDocument.getRootElement().addContent(value);
     }
@@ -225,10 +226,10 @@ class SlingI18nMap {
 
     // replace some special chars first
     String text = value;
-    text = StringUtils.replace(text, "ä", "ae");
-    text = StringUtils.replace(text, "ö", "oe");
-    text = StringUtils.replace(text, "ü", "ue");
-    text = StringUtils.replace(text, "ß", "ss");
+    text = Strings.CS.replace(text, "ä", "ae");
+    text = Strings.CS.replace(text, "ö", "oe");
+    text = Strings.CS.replace(text, "ü", "ue");
+    text = Strings.CS.replace(text, "ß", "ss");
 
     // replace all invalid chars
     StringBuilder sb = new StringBuilder(text);

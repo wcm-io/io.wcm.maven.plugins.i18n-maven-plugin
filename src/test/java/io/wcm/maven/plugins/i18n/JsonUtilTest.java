@@ -36,9 +36,9 @@ class JsonUtilTest {
   @Test
   void testToString() throws Exception {
     JsonObject jsonObject = Json.createObjectBuilder()
-        .add("key1", "value1")
-        .add("key2", 55)
-        .build();
+      .add("key1", "value1")
+      .add("key2", 55)
+      .build();
     JSONAssert.assertEquals(JSON_STRING, JsonUtil.toString(jsonObject), true);
   }
 
